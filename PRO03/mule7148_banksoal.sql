@@ -27,9 +27,7 @@ CREATE TABLE IF NOT EXISTS `tbl_fakultas` (
   PRIMARY KEY (`id_fakultas`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Dumping data for table mule7148_banksoal.tbl_fakultas: ~0 rows (approximately)
-/*!40000 ALTER TABLE `tbl_fakultas` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tbl_fakultas` ENABLE KEYS */;
+-- Data exporting was unselected.
 
 
 -- Dumping structure for table mule7148_banksoal.tbl_formatsoal
@@ -45,9 +43,7 @@ CREATE TABLE IF NOT EXISTS `tbl_formatsoal` (
   CONSTRAINT `FK_id_prodi_formatsoal` FOREIGN KEY (`id_prodi`) REFERENCES `tbl_prodi` (`id_prodi`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Dumping data for table mule7148_banksoal.tbl_formatsoal: ~0 rows (approximately)
-/*!40000 ALTER TABLE `tbl_formatsoal` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tbl_formatsoal` ENABLE KEYS */;
+-- Data exporting was unselected.
 
 
 -- Dumping structure for table mule7148_banksoal.tbl_kelasmahasiswa
@@ -66,9 +62,7 @@ CREATE TABLE IF NOT EXISTS `tbl_kelasmahasiswa` (
   CONSTRAINT `FK_id_prodi_kelasmahasiswa` FOREIGN KEY (`id_prodi`) REFERENCES `tbl_prodi` (`id_prodi`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Dumping data for table mule7148_banksoal.tbl_kelasmahasiswa: ~0 rows (approximately)
-/*!40000 ALTER TABLE `tbl_kelasmahasiswa` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tbl_kelasmahasiswa` ENABLE KEYS */;
+-- Data exporting was unselected.
 
 
 -- Dumping structure for table mule7148_banksoal.tbl_matakuliah
@@ -86,9 +80,7 @@ CREATE TABLE IF NOT EXISTS `tbl_matakuliah` (
   CONSTRAINT `FK_id_periode_matakuliah` FOREIGN KEY (`id_prodi`) REFERENCES `tbl_prodi` (`id_prodi`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Dumping data for table mule7148_banksoal.tbl_matakuliah: ~0 rows (approximately)
-/*!40000 ALTER TABLE `tbl_matakuliah` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tbl_matakuliah` ENABLE KEYS */;
+-- Data exporting was unselected.
 
 
 -- Dumping structure for table mule7148_banksoal.tbl_periode
@@ -101,9 +93,7 @@ CREATE TABLE IF NOT EXISTS `tbl_periode` (
   PRIMARY KEY (`id_periode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Dumping data for table mule7148_banksoal.tbl_periode: ~0 rows (approximately)
-/*!40000 ALTER TABLE `tbl_periode` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tbl_periode` ENABLE KEYS */;
+-- Data exporting was unselected.
 
 
 -- Dumping structure for table mule7148_banksoal.tbl_prodi
@@ -124,9 +114,7 @@ CREATE TABLE IF NOT EXISTS `tbl_prodi` (
   CONSTRAINT `FK_id_user_kepala_prodi` FOREIGN KEY (`id_user_kepala_prodi`) REFERENCES `tbl_user` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Dumping data for table mule7148_banksoal.tbl_prodi: ~0 rows (approximately)
-/*!40000 ALTER TABLE `tbl_prodi` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tbl_prodi` ENABLE KEYS */;
+-- Data exporting was unselected.
 
 
 -- Dumping structure for table mule7148_banksoal.tbl_soal
@@ -155,29 +143,26 @@ CREATE TABLE IF NOT EXISTS `tbl_soal` (
   CONSTRAINT `FK_id_user_dosen_soal` FOREIGN KEY (`id_user_dosen_soal`) REFERENCES `tbl_user` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Dumping data for table mule7148_banksoal.tbl_soal: ~0 rows (approximately)
-/*!40000 ALTER TABLE `tbl_soal` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tbl_soal` ENABLE KEYS */;
+-- Data exporting was unselected.
 
 
 -- Dumping structure for table mule7148_banksoal.tbl_user
 CREATE TABLE IF NOT EXISTS `tbl_user` (
   `id_user` int(11) NOT NULL AUTO_INCREMENT,
   `nidn_user` varchar(50) DEFAULT NULL,
+  `level_user` varchar(50) DEFAULT NULL,
   `nama_user` varchar(50) DEFAULT NULL,
   `notelp_user` varchar(15) DEFAULT NULL,
   `email_user` varchar(50) DEFAULT NULL,
-  `username_user` varchar(50) DEFAULT NULL,
-  `password_user` varchar(50) DEFAULT NULL,
+  `user_name` varchar(50) DEFAULT NULL,
+  `user_password` varchar(50) DEFAULT NULL,
   `foto_user` varchar(50) DEFAULT NULL,
   `created_user` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_user` datetime DEFAULT NULL ON UPDATE current_timestamp(),
   PRIMARY KEY (`id_user`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Dumping data for table mule7148_banksoal.tbl_user: ~0 rows (approximately)
-/*!40000 ALTER TABLE `tbl_user` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tbl_user` ENABLE KEYS */;
+-- Data exporting was unselected.
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
