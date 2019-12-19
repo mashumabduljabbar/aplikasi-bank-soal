@@ -61,7 +61,7 @@ var myTable =  $('#datatable').DataTable({
 				   targets: [7],
 				   data: null,
 				   render: function ( data, type, row, meta ) {                   
-					return "<a href='<?php echo base_url();?>superadmin/dosen_ubah/"+row[7]+"'> <button type='button' class='btn btn-xs btn-warning'><i class='fa fa-pencil'></i> Ubah</button></a> <a onclick=\"return confirm('Yakin untuk menghapus user ini ?')\" href='<?php echo base_url();?>superadmin/dosen_aksi_hapus/"+row[7]+"'> <button type='button' class='btn btn-xs btn-danger'><i class='fa fa-trash'></i> Hapus</button></a>";
+					return "<a href='<?php echo base_url();?>superadmin/dosen_ubah/"+row[7]+"'> <button type='button' class='btn btn-xs btn-warning'><i class='fa fa-pencil'></i> Ubah</button></a> <a onclick=\"return confirm('Yakin untuk menghapus Dosen ini ?')\" href='<?php echo base_url();?>superadmin/dosen_aksi_hapus/"+row[7]+"'> <button type='button' class='btn btn-xs btn-danger'><i class='fa fa-trash'></i> Hapus</button></a>";
 				   }
 				},],
 		});

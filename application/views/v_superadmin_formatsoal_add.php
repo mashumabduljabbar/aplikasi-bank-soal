@@ -17,10 +17,10 @@
 				<div class="box-body">
 				  <div class="row">
 				  <?php echo form_open_multipart("superadmin/formatsoal_aksi_tambah"); ?>
-					<div class="col-md-4">
+					<div class="col-md-6">
 					  <div class="form-group">
 						<label>Petunjuk</label>
-						<textarea rows="5" class="form-control" name="petunjukujian_formatsoal" placeholder="Petunjuk" required></textarea>
+						<textarea rows="5" id="deskripsi" class="form-control" name="petunjukujian_formatsoal" placeholder="Petunjuk" required>Petunjuk</textarea>
 					  </div>
 					</div>
 					<div class="col-md-4">
@@ -33,16 +33,16 @@
 							<?php } ?>
 						</select>
 					  </div>
-					  <div class="form-group">
-						<label>&nbsp;</label>
-						<input type="submit" value="Submit" class="form-control btn btn-success">
-					  </div>
 					</div>
 					<div class="col-md-4">
 					  <div class="form-group">
 						<label>Kop Surat</label>
 						<img class="img img-responsive user-image" id="blah" >
 						<input type="file" onchange="readURL(this);"  class="form-control" name="userfiles" required>
+					  </div>
+					  <div class="form-group">
+						<label>&nbsp;</label>
+						<input type="submit" value="Submit" class="form-control btn btn-success">
 					  </div>
 					</div>
 					<?php echo form_close(); ?>
@@ -53,8 +53,12 @@
       </div>
     </section>
   </div>
-
- <script type="text/javascript">
+<script src="<?php echo base_url('assets/plugins/tinymce/tinymce.min.js'); ?>"></script>
+<script type="text/javascript">
+	tinymce.init({
+    selector: '#deskripsi',
+    plugins : 'advlist autolink link lists charmap print preview table'
+  });
         function readURL(input) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();

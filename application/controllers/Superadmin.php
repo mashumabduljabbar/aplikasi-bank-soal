@@ -513,10 +513,41 @@ class Superadmin extends CI_Controller {
     {
 		$id_fakultas = $_POST['id_fakultas'];
 		$tbl_prodi = $this->m_general->view_where("tbl_prodi", array("id_fakultas" => $id_fakultas), "nama_prodi ASC");
+			echo "<option>-- Pilih Prodi --</option>";
 		foreach($tbl_prodi as $prodi){
 			echo "<option value='$prodi->id_prodi'>$prodi->nama_prodi</option>";
 		}
     }
+	
+	public function kelasmahasiswa_matakuliah()
+    {
+		$id_prodi = $_POST['id_prodi'];
+		$tbl_matakuliah = $this->m_general->view_where("tbl_matakuliah", array("id_prodi" => $id_prodi), "nama_matakuliah ASC");
+			echo "<option>-- Pilih Mata Kuliah --</option>";
+		foreach($tbl_matakuliah as $matakuliah){
+			echo "<option value='$matakuliah->id_matakuliah'>$matakuliah->nama_matakuliah</option>";
+		}
+    }
+	
+	public function kelasmahasiswa_kelasmahasiswa()
+    {
+		$id_prodi = $_POST['id_prodi'];
+		$tbl_kelasmahasiswa = $this->m_general->view_where("tbl_kelasmahasiswa", array("id_prodi" => $id_prodi), "semester_kelasmahasiswa ASC");
+			echo "<option>-- Pilih Kelas --</option>";
+		foreach($tbl_kelasmahasiswa as $kelasmahasiswa){
+			$semester = array("","I","II","III","IV","V","VI");
+			$nama_semester = $semester[$kelasmahasiswa->semester_kelasmahasiswa];
+			echo "<option value='$kelasmahasiswa->id_kelasmahasiswa'>T.A : $kelasmahasiswa->periode_kelasmahasiswa - Semester : $nama_semester - Kelas : $kelasmahasiswa->nomor_kelasmahasiswa</option>";
+		}
+    }
+	
+	public function kelasmahasiswa_formatsoal()
+    {
+		$id_prodi = $_POST['id_prodi'];
+		$tbl_formatsoal = $this->m_general->view_by("tbl_formatsoal", array("id_prodi" => $id_prodi));
+		echo $tbl_formatsoal->id_formatsoal;
+    }
+	
 	public function kelasmahasiswa_semester()
     {
 		$periode_kelasmahasiswa = $_POST['periode_kelasmahasiswa'];
@@ -801,10 +832,11 @@ class Superadmin extends CI_Controller {
 			$folder = "kop";
 			$file_upload = $_FILES['userfiles'];
 			$files = $file_upload;
+			$kopsurat_formatsoal = $_POST['kopsurat_formatsoal'];
 					
 			if($files['name'] != "" OR $files['name'] != NULL){
 						$file = './assets/dist/img/kop/'.$tbl_formatsoal->kopsurat_formatsoal;
-						if($tbl_formatsoal->kopsurat_formatsoal!="default/formatsoal.png" && is_readable($file)){
+						if($tbl_formatsoal->kopsurat_formatsoal!="default/user.png" && is_readable($file)){
 							unlink($file);
 						}
 						$_POST['kopsurat_formatsoal'] = $this->m_general->file_upload($files, $folder);
@@ -818,11 +850,167 @@ class Superadmin extends CI_Controller {
 			$where['id_formatsoal'] = $id_formatsoal;
 			$tbl_formatsoal = $this->m_general->view_by("tbl_formatsoal", $where);
 			$file = './assets/dist/img/kop/'.$tbl_formatsoal->kopsurat_formatsoal;
-			if($tbl_formatsoal->kopsurat_formatsoal!="default/formatsoal.png" && is_readable($file)){
+			if($tbl_formatsoal->kopsurat_formatsoal!="default/user.png" && is_readable($file)){
 				unlink($file);
 			}
 			$this->m_general->hapus("tbl_formatsoal", $where); // Panggil fungsi hapus() yang ada di m_general.php
 			redirect('superadmin/formatsoal');
+	}
+	
+	////////////////////////////////////
+	
+	////////////////////////////////////
+	
+	////////////////////////////////////
+	
+	////////////////////////////////////
+	
+	public function get_data_master_soal()
+	{		
+		$table = "
+        (
+            SELECT (@cnt := @cnt + 1) AS rowNumber, d.nama_fakultas, c.nama_prodi, b.nama_matakuliah, 
+		CONCAT(
+				CASE
+					 	WHEN e.semester_kelasmahasiswa='1' THEN 'I'
+					 	WHEN e.semester_kelasmahasiswa='2' THEN 'II'
+					 	WHEN e.semester_kelasmahasiswa='3' THEN 'III'
+					 	WHEN e.semester_kelasmahasiswa='4' THEN 'IV'
+					 	WHEN e.semester_kelasmahasiswa='5' THEN 'V'
+					 	WHEN e.semester_kelasmahasiswa='6' THEN 'VI'						 
+					END
+		,' / ',e.nomor_kelasmahasiswa) as semester, f.nama_user, a.tanggal_soal,
+                a.totalwaktu_soal, CASE
+					 	WHEN a.sifatujian_soal='0' THEN 'Open Book'
+					 	WHEN a.sifatujian_soal='1' THEN 'Close Book'
+					END as sifatujian, a.id_soal, a.tipe_soal
+            FROM
+                tbl_soal a
+					 LEFT JOIN tbl_matakuliah b ON b.id_matakuliah=a.id_matakuliah
+					 LEFT JOIN tbl_prodi c ON c.id_prodi=b.id_prodi
+					 LEFT JOIN tbl_fakultas d ON d.id_fakultas=c.id_fakultas
+					 LEFT JOIN tbl_kelasmahasiswa e ON e.id_kelasmahasiswa=a.id_kelasmahasiswa
+					 LEFT JOIN tbl_user f ON f.id_user=a.id_user_dosen_soal
+					 CROSS JOIN (SELECT @cnt := 0) AS dummy
+        )temp";
+		
+        $primaryKey = 'id_soal';
+        $columns = array(
+        array( 'db' => 'rowNumber',     'dt' => 0 ),
+        array( 'db' => 'nama_fakultas',     'dt' => 1 ),
+        array( 'db' => 'nama_prodi',        'dt' => 2 ),
+        array( 'db' => 'nama_matakuliah',       'dt' => 3 ),
+        array( 'db' => 'semester',       'dt' => 4 ),
+        array( 'db' => 'nama_user',       'dt' => 5 ),
+        array( 'db' => 'tanggal_soal',       'dt' => 6 ),
+        array( 'db' => 'tipe_soal',       'dt' => 7 ),
+        array( 'db' => 'id_soal',       'dt' => 8 ),
+        );
+
+        $sql_details = array(
+            'user' => $this->db->username,
+            'pass' => $this->db->password,
+            'db'   => $this->db->database,
+            'host' => $this->db->hostname
+        );
+        echo json_encode(
+            SSP::simple( $_GET, $sql_details, $table, $primaryKey, $columns)
+        );
+	}	
+	
+	public function soal()
+    {
+		$this->load->view("v_superadmin_header");
+        $this->load->view("v_superadmin_soal");
+        $this->load->view("v_superadmin_footer");
+    }		
+	public function soal_tambah()
+    {
+		$data['err'] = "";
+		$data['tbl_fakultas'] = $this->m_general->view_order("tbl_fakultas","nama_fakultas ASC");
+		$data['tbl_user'] = $this->m_general->view_order("tbl_user","nama_user ASC");
+		$this->load->view("v_superadmin_header");
+        $this->load->view("v_superadmin_soal_add",$data);
+		$this->load->view("v_superadmin_footer");
+    }
+	public function soal_ubah($id_soal)
+	{
+		$where = array("id_soal" => $id_soal);
+		$data['tbl_soal'] = $this->m_general->view_by("tbl_soal",$where);
+		$data['err'] = "";
+		$data['tbl_matakuliah'] = $this->m_general->view_order("tbl_matakuliah","nama_matakuliah ASC");
+		$data['tbl_matakuliah_by']= $this->m_general->view_by("tbl_matakuliah",array("id_matakuliah" => $data['tbl_soal']->id_matakuliah));
+		$data['tbl_kelasmahasiswa'] = $this->m_general->view_order("tbl_kelasmahasiswa","periode_kelasmahasiswa ASC");
+		$data['tbl_kelasmahasiswa_by']= $this->m_general->view_by("tbl_kelasmahasiswa",array("id_kelasmahasiswa" => $data['tbl_soal']->id_kelasmahasiswa));
+		$data['tbl_user'] = $this->m_general->view_order("tbl_user","nama_user ASC");
+		$data['tbl_user_by']= $this->m_general->view_by("tbl_user",array("id_user" => $data['tbl_soal']->id_user_dosen_soal));
+		$this->load->view("v_superadmin_header");
+		$this->load->view('v_superadmin_soal_edit', $data);
+		$this->load->view("v_superadmin_footer");
+	}	
+	public function soal_aksi_tambah()
+    {
+			$_POST['id_soal'] = $this->m_general->bacaidterakhir("tbl_soal", "id_soal");
+			$this->m_general->add("tbl_soal", $_POST);
+			redirect('superadmin/soal');
+	}				
+	public function soal_aksi_ubah($id_soal)
+    {
+			$where['id_soal'] = $id_soal;
+			$this->m_general->edit("tbl_soal", $where, $_POST);
+			redirect('superadmin/soal');		
+    }	
+	public function soal_aksi_hapus($id_soal){
+			$where['id_soal'] = $id_soal;
+			$this->m_general->hapus("tbl_soal", $where); // Panggil fungsi hapus() yang ada di m_general.php
+			redirect('superadmin/soal');
+	}
+	
+	public function soal_cetak($id_soal){
+		$where['id_soal'] = $id_soal;
+		$tbl_soal =  $this->m_general->view_by("tbl_soal", $where);
+		$where2['id_formatsoal'] = $tbl_soal->id_formatsoal;
+		$tbl_formatsoal =  $this->m_general->view_by("tbl_formatsoal", $where2);
+		$data['tbl_soal'] =  $this->db->query("SELECT (@cnt := @cnt + 1) AS rowNumber, d.nama_fakultas, c.nama_prodi, b.nama_matakuliah, 
+		CASE
+					 	WHEN e.semester_kelasmahasiswa='1' THEN 'I'
+					 	WHEN e.semester_kelasmahasiswa='2' THEN 'II'
+					 	WHEN e.semester_kelasmahasiswa='3' THEN 'III'
+					 	WHEN e.semester_kelasmahasiswa='4' THEN 'IV'
+					 	WHEN e.semester_kelasmahasiswa='5' THEN 'V'
+					 	WHEN e.semester_kelasmahasiswa='6' THEN 'VI'						 
+					END
+		 as semester, f.nama_user, a.tanggal_soal, e.gg_kelasmahasiswa, e.periode_kelasmahasiswa,
+                a.totalwaktu_soal, CASE
+					 	WHEN a.sifatujian_soal='0' THEN 'Open Book'
+					 	WHEN a.sifatujian_soal='1' THEN 'Close Book'
+					END as sifatujian, a.id_soal, a.tipe_soal, a.isi_soal
+            FROM
+                tbl_soal a
+					 LEFT JOIN tbl_matakuliah b ON b.id_matakuliah=a.id_matakuliah
+					 LEFT JOIN tbl_prodi c ON c.id_prodi=b.id_prodi
+					 LEFT JOIN tbl_fakultas d ON d.id_fakultas=c.id_fakultas
+					 LEFT JOIN tbl_kelasmahasiswa e ON e.id_kelasmahasiswa=a.id_kelasmahasiswa
+					 LEFT JOIN tbl_user f ON f.id_user=a.id_user_dosen_soal
+					 CROSS JOIN (SELECT @cnt := 0) AS dummyb where id_soal='$id_soal'")->row();
+		$data['tbl_formatsoal'] =  $tbl_formatsoal;
+		$data['id_soal'] =  $id_soal;
+		$data['haritanggal'] = $this->m_general->getHari($tbl_soal->tanggal_soal)." / ".$this->m_general->getTanggalIndo($tbl_soal->tanggal_soal);
+		$mpdf = new \Mpdf\Mpdf([
+		'mode' => 'utf-8', 
+		'format' => 'A4-P',
+		'margin_left' => 12,
+		'margin_right' => 12,
+		'margin_top' => 5,
+		'margin_bottom' => 10,
+		'margin_header' => 3,
+		'margin_footer' => 3,
+		]); //L For Landscape , P for Portrait
+        $mpdf->SetTitle($tbl_soal->id_soal);
+		$halaman = $this->load->view('v_superadmin_soal_pdf',$data,true);
+		$mpdf->setFooter('{PAGENO}');
+        $mpdf->WriteHTML($halaman);
+        $mpdf->Output();
 	}
 	
 	////////////////////////////////////

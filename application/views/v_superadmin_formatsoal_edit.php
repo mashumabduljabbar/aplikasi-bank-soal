@@ -1,4 +1,4 @@
-  <div class="content-wrapper" >
+<div class="content-wrapper" >
     <section class="content-header">
       <h3>
         Ubah Format Soal
@@ -17,10 +17,10 @@
 				<div class="box-body">
 				  <div class="row">
 				  <?php echo form_open_multipart("superadmin/formatsoal_aksi_ubah/$tbl_formatsoal->id_formatsoal"); ?>
-					<div class="col-md-4">
+					<div class="col-md-6">
 					  <div class="form-group">
 						<label>Petunjuk</label>
-						<textarea rows="5" class="form-control" name="petunjukujian_formatsoal" placeholder="Petunjuk" required><?php echo $tbl_formatsoal->petunjukujian_formatsoal;?></textarea>
+						<textarea id="deskripsi" rows="5" class="form-control" name="petunjukujian_formatsoal" placeholder="Petunjuk" required><?php echo $tbl_formatsoal->petunjukujian_formatsoal;?></textarea>
 					  </div>
 					</div>
 					<div class="col-md-4">
@@ -33,10 +33,6 @@
 							<?php } ?>
 						</select>
 					  </div>
-					  <div class="form-group">
-						<label>&nbsp;</label>
-						<input type="submit" value="Submit" class="form-control btn btn-success">
-					  </div>
 					</div>
 					<div class="col-md-4">
 					  <div class="form-group">
@@ -44,6 +40,10 @@
 						<img width="220px" class="img img-responsive user-image" id="blah" src="<?php echo base_url();?>assets/dist/img/kop/<?php echo $tbl_formatsoal->kopsurat_formatsoal."?".strtotime("now");?>">
 						<input type="hidden" name="kopsurat_formatsoal" value="<?php echo $tbl_formatsoal->kopsurat_formatsoal; ?>">
 						<input type="file" onchange="readURL(this);"  class="form-control" name="userfiles" >
+					  </div>
+					  <div class="form-group">
+						<label>&nbsp;</label>
+						<input type="submit" value="Submit" class="form-control btn btn-success">
 					  </div>
 					</div>
 					<?php echo form_close(); ?>
@@ -54,8 +54,14 @@
       </div>
     </section>
   </div>
+ <!-- include summernote css/js -->
+<script src="<?php echo base_url('assets/plugins/tinymce/tinymce.min.js'); ?>"></script>
+<script type="text/javascript">
+	tinymce.init({
+    selector: '#deskripsi',
+    plugins : 'advlist autolink link lists charmap print preview'
+  });
 
- <script type="text/javascript">
         function readURL(input) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();

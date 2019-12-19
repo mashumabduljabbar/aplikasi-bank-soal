@@ -20,7 +20,7 @@
 					<div class="col-md-4">
 					  <div class="form-group">
 						<label>Fakultas</label>
-						<select id="id_fakultas" class="form-control select2" data-placeholder="Pilih Fakultas" requiredstyle="width: 100%;" >
+						<select id="id_fakultas" class="form-control select2" data-placeholder="Pilih Fakultas" required style="width: 100%;" >
 							<option></option>
 							<?php foreach($tbl_fakultas as $fakultas){?>
 							<option value="<?php echo $fakultas->id_fakultas;?>"><?php echo $fakultas->nama_fakultas;?></option>
