@@ -7,26 +7,16 @@ class M_general extends CI_Model {
 		return $total;
 	}
 
-	public function last_peminjaman($table){
-		$query = $this->db->query("select id_peminjaman+1 as id_peminjaman from $table order by id_peminjaman DESC LIMIT 1");
-		$date = date("dmY");
+	public function bacaidterakhir($table, $id){
+		$query = $this->db->query("select $id+1 as $id from $table order by $id DESC LIMIT 1");
 		if($query->num_rows() > 0){
 			$query2 = $query->row();
-			$query_id_peminjaman = $query2->id_peminjaman;
+			$idnya = $query2->$id;
 		}else{
-			$query_id_peminjaman = "1";
+			$idnya = "1";
 		}
 		
-		$id_peminjaman = sprintf("%03d",($query_id_peminjaman));
-		return "I-".$id_peminjaman."-".$date;
-	}
-	
-	public function bacaidterakhir($table, $id){
-		$this->db->select("($id*1) as $id");
-		$this->db->order_by("$id DESC");
-		$this->db->limit(1);
-		$hasil = $this->db->get($table)->row();
-		return $hasil->$id+1;
+		return $idnya;
 	}
 	
 	public function view($table){
